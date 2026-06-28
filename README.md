@@ -56,7 +56,7 @@ A modern offline real-time chat application built with an ESP32.
 - [x] LittleFS
 - [x] Persistent Chat History
 - [x] Login Screen
-- [ ] Online Users
+- [x] Online Users
 - [ ] Typing Indicator
 - [ ] Emoji Picker
 - [ ] File Sharing
