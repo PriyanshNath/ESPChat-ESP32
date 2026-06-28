@@ -1,0 +1,6 @@
+.vscode/
+build/
+*.bin
+*.elf
+*.map
+*.hex

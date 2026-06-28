@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ESPChat</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+    <div class="loginBox">
+
+        <h1>💬 ESPChat</h1>
+
+        <input
+        id="loginName"
+        placeholder="Enter Username"
+        maxlength="20">
+
+        <button onclick="joinChat()">
+            Join Chat
+        </button>
+
+    </div>
+
+</div>
+
+<!-- CHAT -->
+
+<div id="chatScreen">
+
+<header>
+
+<div class="logo">
+
+💬 ESPChat
+
+</div>
+
+<div id="connectionStatus">
+
+🟢 Connected
+
+</div>
+
+</header>
+
+<div id="chat"></div>
+
+<div class="bottom">
+
+<input
+id="message"
+placeholder="Type a message...">
+
+<button onclick="send()">
+
+➤
+
+</button>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
