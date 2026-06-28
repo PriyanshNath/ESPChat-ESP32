@@ -206,3 +206,17 @@ to{
 }
 
 }
+
+.systemMessage{
+
+    text-align:center;
+
+    color:#9fa3a8;
+
+    font-size:13px;
+
+    font-style:italic;
+
+    margin:18px 0;
+
+}

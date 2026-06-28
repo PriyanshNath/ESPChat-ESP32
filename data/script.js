@@ -82,17 +82,32 @@ function send() {
 // ----------------------
 
 ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
 
-  if (data.type === "users") {
-    renderUsers(data.users);
+    const data = JSON.parse(event.data);
 
-    document.getElementById("onlineCount").textContent = data.online;
+    if (data.type === "users")
+    {
+        renderUsers(data.users);
 
-    return;
-  }
+        document.getElementById("onlineCount").textContent = data.online;
 
-  addMessage(data);
+        return;
+    }
+
+    if (data.type === "system")
+    {
+        addSystemMessage(data.message);
+
+        return;
+    }
+
+    if (data.type === "message")
+    {
+        addMessage(data);
+
+        return;
+    }
+
 };
 
 
@@ -147,6 +162,19 @@ ${data.message}
   chat.appendChild(bubble);
 
   chat.scrollTop = chat.scrollHeight;
+}
+
+function addSystemMessage(text)
+{
+    const div = document.createElement("div");
+
+    div.className = "systemMessage";
+
+    div.innerHTML = `⚙️ ${text}`;
+
+    chat.appendChild(div);
+
+    chat.scrollTop = chat.scrollHeight;
 }
 
 function renderUsers(list)

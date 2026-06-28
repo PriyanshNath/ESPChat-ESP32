@@ -124,10 +124,17 @@ void webSocketEvent(uint8_t num,
         case WStype_DISCONNECTED:
         {
             Serial.printf("Client %u Disconnected\n", num);
-
+        
+            String name = clients[num].username;
+        
+            if (name != "")
+            {
+                broadcastSystemMessage(name + " left the chat");
+            }
+        
             clients[num].connected = false;
             clients[num].username = "";
-            
+        
             broadcastUserList();
         }
         break;
@@ -140,6 +147,22 @@ void webSocketEvent(uint8_t num,
     }
 
 }
+
+void broadcastSystemMessage(String text)
+{
+    JsonDocument doc;
+
+    doc["type"] = "system";
+    doc["message"] = text;
+
+    String json;
+    serializeJson(doc, json);
+
+    webSocket.broadcastTXT(json);
+
+    Serial.println(json);
+}
+
 void handlePacket(uint8_t client, String payload)
         {
             JsonDocument doc;
@@ -179,6 +202,10 @@ void handlePacket(uint8_t client, String payload)
             {
                 clients[client].connected = true;
                 clients[client].username = doc["username"].as<String>();
+
+                broadcastSystemMessage(clients[client].username + " joined the chat");
+
+                broadcastUserList();
 
                 Serial.print("Registered Client ");
                 Serial.print(client);
