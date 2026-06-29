@@ -57,8 +57,13 @@ A modern offline real-time chat application built with an ESP32.
 - [x] Persistent Chat History
 - [x] Login Screen
 - [x] Online Users
+<<<<<<< HEAD
 - [x] Typing Indicator
 - [x] Emoji Picker
+=======
+- [ ] Typing Indicator
+- [ ] Emoji Picker
+>>>>>>> parent of ccb38ca (Mark Typing Indicator as completed)
 - [ ] File Sharing
 - [ ] Multiple Rooms
 
