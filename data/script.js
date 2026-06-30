@@ -8,13 +8,14 @@ const loginScreen = document.getElementById("loginScreen");
 const chatScreen = document.getElementById("chatScreen");
 
 const loginName = document.getElementById("loginName");
+const joinButton = document.getElementById("joinButton");
+const loginError = document.getElementById("loginError");
+const logoutButton = document.getElementById("logoutButton");
 
 const chat = document.getElementById("chat");
 
 const messageInput = document.getElementById("message");
 
-<<<<<<< Updated upstream
-=======
 const emojiToggle = document.getElementById("emojiToggle");
 const emojiPicker = document.getElementById("emojiPicker");
 const attachButton = document.getElementById("attachButton");
@@ -23,7 +24,6 @@ const uploadStatus = document.getElementById("uploadStatus");
 
 const MAX_FILE_SIZE = 200 * 1024;
 
->>>>>>> Stashed changes
 let username = "";
 
 const typingIndicator =
@@ -51,28 +51,46 @@ window.onload = () => {
 // ----------------------
 
 function joinChat() {
+    const requestedName = loginName.value.trim();
 
-    console.log("JOIN CALLED");
-    username = loginName.value.trim();
+    loginError.textContent = "";
 
-    if (username === "") return;
-
-    localStorage.setItem("username", username);
-    loginScreen.style.display = "none";
-    chatScreen.style.display = "flex";
-    messageInput.focus();
-
-    if (ws && (ws.readyState === WebSocket.OPEN ||
-               ws.readyState === WebSocket.CONNECTING)) {
+    if (requestedName === "") {
+        loginError.textContent = "Please enter a username";
+        loginName.focus();
         return;
     }
 
-    ws = new WebSocket("ws://" + location.hostname + ":81/");
+    if (ws && (ws.readyState === WebSocket.OPEN ||
+               ws.readyState === WebSocket.CONNECTING)) return;
 
-    ws.onopen = () => {
+    username = requestedName;
+    joinButton.disabled = true;
+    joinButton.textContent = "Connecting...";
+
+    let socket;
+
+    try {
+        socket = new WebSocket("ws://" + location.hostname + ":81/");
+        ws = socket;
+    }
+    catch (error) {
+        ws = null;
+        resetJoinButton();
+        loginError.textContent = "Could not start the connection";
+        return;
+    }
+
+    socket.onopen = () => {
         console.log("Connected");
 
-        ws.send(JSON.stringify({
+        localStorage.setItem("username", username);
+        loginScreen.style.display = "none";
+        chatScreen.style.display = "flex";
+        resetJoinButton();
+        messageInput.focus();
+
+        socket.send(JSON.stringify({
             type: "join",
             username: username
         }));
@@ -80,18 +98,58 @@ function joinChat() {
         setConnectionStatus(true);
     };
 
-    ws.onmessage = handleSocketMessage;
+    socket.onmessage = handleSocketMessage;
 
-    ws.onclose = () => {
+    socket.onclose = () => {
+        if (ws !== socket) return;
+
+        ws = null;
         console.log("Disconnected");
         setConnectionStatus(false);
         typingIndicator.textContent = "";
+
+        if (loginScreen.style.display !== "none") {
+            resetJoinButton();
+            loginError.textContent = "Could not connect to ESPChat";
+        }
     };
 
-    ws.onerror = () => {
+    socket.onerror = () => {
+        if (ws !== socket) return;
         setConnectionStatus(false);
     };
+}
 
+function resetJoinButton() {
+    joinButton.disabled = false;
+    joinButton.textContent = "Join Chat";
+}
+
+function logoutChat() {
+    const socket = ws;
+    ws = null;
+
+    if (socket) socket.close();
+
+    username = "";
+    localStorage.removeItem("username");
+
+    chat.innerHTML = "";
+    document.getElementById("users").innerHTML = "";
+    document.getElementById("onlineCount").textContent = "0";
+    messageInput.value = "";
+    typingIndicator.textContent = "";
+    uploadStatus.textContent = "";
+
+    closeEmojiPicker();
+    setConnectionStatus(false);
+    resetJoinButton();
+
+    chatScreen.style.display = "none";
+    loginScreen.style.display = "flex";
+    loginName.value = "";
+    loginError.textContent = "";
+    loginName.focus();
 }
 
 function setConnectionStatus(connected) {
@@ -391,8 +449,6 @@ messageInput.addEventListener("keydown", (e) => {
     send();
 });
 
-<<<<<<< Updated upstream
-=======
 emojiToggle.addEventListener("click", (event) => {
     event.stopPropagation();
 
@@ -504,7 +560,6 @@ fileInput.addEventListener("change", async () => {
     }
 });
 
->>>>>>> Stashed changes
 messageInput.addEventListener("input",()=>{
 
     if (!ws || ws.readyState !== WebSocket.OPEN) return;
@@ -538,4 +593,11 @@ messageInput.addEventListener("input",()=>{
 
     },1000);
 
+});
+
+joinButton.addEventListener("click", joinChat);
+logoutButton.addEventListener("click", logoutChat);
+
+loginName.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") joinChat();
 });
