@@ -41,6 +41,13 @@ body{
     margin-bottom:15px;
 }
 
+#loginError{
+    min-height:20px;
+    margin-top:12px;
+    color:#f23f42;
+    font-size:13px;
+}
+
 /* CHAT */
 
 #chatScreen{
@@ -100,6 +107,21 @@ header{
 
 #connectionStatus{
     color:#57F287;
+}
+
+.headerActions{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.logoutButton{
+    padding:9px 14px;
+    background:#da373c;
+}
+
+.logoutButton:hover{
+    background:#a1282c;
 }
 
 #chat{
@@ -178,6 +200,7 @@ header{
     gap:10px;
     padding:18px;
     background:#2b2d31;
+    position:relative;
 }
 
 .bottom input{
@@ -208,8 +231,6 @@ button:hover{
     background:#4752C4;
 }
 
-<<<<<<< Updated upstream
-=======
 .emojiToggle{
     min-width:48px;
     padding:12px;
@@ -329,7 +350,6 @@ button:disabled{
     font-size:12px;
 }
 
->>>>>>> Stashed changes
 @keyframes fade{
 
 from{

@@ -25,11 +25,14 @@
         <input
         id="loginName"
         placeholder="Enter Username"
-        maxlength="20">
+        maxlength="20"
+        autocomplete="nickname">
 
-        <button onclick="joinChat()">
+        <button id="joinButton" type="button">
             Join Chat
         </button>
+
+        <div id="loginError" role="status" aria-live="polite"></div>
 
     </div>
 
@@ -45,8 +48,16 @@
         💬 ESPChat
     </div>
 
-    <div id="connectionStatus">
-        🟢 Connected • <span id="onlineCount">0</span> Online
+    <div class="headerActions">
+
+        <div id="connectionStatus">
+            🔴 Disconnected • <span id="onlineCount">0</span> Online
+        </div>
+
+        <button id="logoutButton" class="logoutButton" type="button">
+            Logout
+        </button>
+
     </div>
 
 </header>
@@ -73,8 +84,6 @@
 
 <div class="bottom">
 
-<<<<<<< Updated upstream
-=======
 <button
 id="attachButton"
 class="attachButton"
@@ -122,7 +131,6 @@ aria-expanded="false">
 
 </div>
 
->>>>>>> Stashed changes
 <input
 id="message"
 placeholder="Type a message...">
